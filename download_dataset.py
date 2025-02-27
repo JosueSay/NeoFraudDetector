@@ -1,10 +1,17 @@
+"""
+Python script for downloading datasets from Kaggle.  
+
+How to use?  
+Refer to the guide in `docs/download_dataset.md` if you need instructions.  
+"""
+
 import os
 import kagglehub
 import shutil
 
 data_dir = "./data"
 os.makedirs(data_dir, exist_ok=True)
-data_set_kaggle = "valakhorasani/bank-transaction-dataset-for-fraud-detection"
+data_set_kaggle = "marusagar/bank-transaction-fraud-detection"
 
 # Ruta de la caché de kagglehub
 cache_dir = os.path.expanduser(f"~/.cache/kagglehub/datasets/{data_set_kaggle}")
