@@ -1,34 +1,55 @@
 import os
-import kagglehub  # type: ignore
+import kagglehub
 import shutil
 
-# Guardar la data en la carpeta data del repositorio
 data_dir = "./data"
 os.makedirs(data_dir, exist_ok=True)
+data_set_kaggle = "valakhorasani/bank-transaction-dataset-for-fraud-detection"
+
+# Ruta de la caché de kagglehub
+cache_dir = os.path.expanduser(f"~/.cache/kagglehub/datasets/{data_set_kaggle}")
+
+# Si existe la caché, eliminarla antes de descargar
+if os.path.exists(cache_dir):
+    shutil.rmtree(cache_dir)
+    print(f"Cache deleted: {cache_dir}")
 
 try:
-    # Intentar descargar el dataset de detección de fraude
-    path = kagglehub.dataset_download("kartik2112/fraud-detection")
+    path = kagglehub.dataset_download(data_set_kaggle)
 
-    # Verificar si el dataset se descargó correctamente
     if not os.path.exists(path):
-        raise FileNotFoundError(f"The dataset was not downloaded correctly. Check the dataset name or the connection.")
+        raise FileNotFoundError(f"The dataset was not downloaded correctly. Check the connection or dataset name.")
 
-    # Mover los archivos a la carpeta data
-    for file in os.listdir(path):
+    files = os.listdir(path)
+    if not files:
+        raise FileNotFoundError("The dataset folder is empty. There may be an extraction error.")
+
+    for file in files:
         file_path = os.path.join(path, file)
+        dest_path = os.path.join(data_dir, file)
+
         if os.path.isfile(file_path):
+            if os.path.exists(dest_path):
+                user_input = input(f"The file '{file}' already exists in '{data_dir}'. Do you want to replace it? (y/n): ").strip().lower()
+                if user_input == "y":
+                    os.remove(dest_path)
+                    print(f"Replacing '{file}'...")
+                else:
+                    print(f"Skipping '{file}'...")
+                    continue
+
             shutil.move(file_path, data_dir)
+            print(f"File moved: {file}")
+
+
         else:
-            print(f"Warning: {file} is not a valid file to move.")
+            print(f"Warning: {file} no es un archivo válido para mover.")
 
-    print(f"Dataset moved to: '{os.path.abspath(data_dir)}'")
+    print(f"Dataset successfully moved to: '{os.path.abspath(data_dir)}'")
 
-except kagglehub.KaggleHubError as e:
-    print(f"Error while downloading the dataset: {e}")
 except FileNotFoundError as e:
     print(f"Error: {e}")
 except PermissionError as e:
     print(f"Permission error: {e}")
 except Exception as e:
-    print(f"An unexpected error occurred: {e}")
+    print(f"Unexpected error: {e}")
