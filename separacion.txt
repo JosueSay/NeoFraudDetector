@@ -1,0 +1,40 @@
+Customer
+
+Customer_ID                 object
+Customer_Name               object
+Gender                      object
+Age                          int64
+State                       object
+City                        object
+Customer_Contact            object
+Customer_Email              object
+
+
+Transaction
+Transaction_Currency        object
+Transaction_Description     object
+Transaction_Device          object
+Transaction_Location        object
+Transaction_ID              object
+Transaction_Date            object
+Transaction_Time            object
+Transaction_Amount         float64
+Transaction_Type            object
+
+
+Propiedad de transición:
+Device_Type                 object
+
+
+Bank_Branch                 object
+Account_Type                object
+Account_Balance            float64
+
+
+Merchant_ID                 object
+Merchant_Category           object
+
+
+
+
+Is_Fraud                     int64
